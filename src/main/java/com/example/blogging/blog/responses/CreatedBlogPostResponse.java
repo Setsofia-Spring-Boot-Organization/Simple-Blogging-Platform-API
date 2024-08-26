@@ -1,8 +1,6 @@
 package com.example.blogging.blog.responses;
 
 import lombok.Builder;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
