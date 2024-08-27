@@ -75,6 +75,7 @@ class BlogServiceImplTest {
 
         // perform the blog creation operation
         ResponseEntity<CreatedBlogPostResponse> response = blogService.createNewBlogPost(blogPostRequest(blog));
+        System.out.println(createdBlogPostResponse());
 
         // assertions
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
