@@ -2,11 +2,18 @@ package com.example.blogging.blog.services;
 
 import com.example.blogging.blog.entities.Blog;
 import com.example.blogging.blog.entities.Tags;
+import com.example.blogging.blog.repositories.BlogRepository;
 import com.example.blogging.blog.requests.NewBlogPostRequest;
+import com.example.blogging.blog.responses.CreatedBlogPost;
 import com.example.blogging.blog.responses.Response;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +21,31 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BlogServiceImplTest {
+    @Mock
+    BlogRepository blogRepository;
+
     @InjectMocks
     BlogServiceImpl blogService;
+
+    private AutoCloseable autoCloseable;
+
+    @BeforeEach
+    void setUp() {
+        autoCloseable = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        if (autoCloseable != null) {
+            autoCloseable.close();
+        }
+        Mockito.reset(blogRepository);
+    }
 
     // create a custom blog item for testing
     Blog blog() {
@@ -34,7 +61,7 @@ class BlogServiceImplTest {
 
         // create new blog entity
         Blog blog = new Blog();
-        blog.setId(UUID.randomUUID().toString());
+        blog.setId(1);
         blog.setCreatedAt(LocalDateTime.now());
         blog.setUpdatedAt(LocalDateTime.now());
         blog.setTittle("Unit Testing");
@@ -54,17 +81,21 @@ class BlogServiceImplTest {
         );
     }
 
-    Response createdBlogPostResponse() {
+    Response<CreatedBlogPost> createdBlogPostResponse() {
         Blog blog = blog();
         NewBlogPostRequest blogPostRequest = blogPostRequest(blog);
-        return Response
-                .builder()
-                .id(blog.getId())
-                .title(blogPostRequest.title())
-                .category(blogPostRequest.category())
-                .tags(blogPostRequest.tags())
-                .createdAt(blog.getCreatedAt())
-                .updatedAt(blog.getUpdatedAt())
+        return Response.<CreatedBlogPost>builder()
+                .status(HttpStatus.CREATED.value())
+                .data(CreatedBlogPost
+                        .builder()
+                        .id(blog.getId())
+                        .title(blogPostRequest.title())
+                        .category(blogPostRequest.category())
+                        .tags(blogPostRequest.tags())
+                        .createdAt(blog.getCreatedAt())
+                        .updatedAt(blog.getUpdatedAt())
+                        .build()
+                )
                 .build();
     }
 
@@ -73,11 +104,15 @@ class BlogServiceImplTest {
         // initialize the blog item
         Blog blog = blog();
 
+        // mock the save operation
+        when(blogRepository.save(any(Blog.class))).thenReturn(blog);
+
         // perform the blog creation operation
-        ResponseEntity<Response> response = blogService.createNewBlogPost(blogPostRequest(blog));
+        ResponseEntity<Response<CreatedBlogPost>> response = blogService.createNewBlogPost(blogPostRequest(blog));
         System.out.println(createdBlogPostResponse());
 
         // assertions
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
+
 }

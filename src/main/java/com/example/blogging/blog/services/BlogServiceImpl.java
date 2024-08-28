@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,7 @@ public class BlogServiceImpl implements BlogService {
     public ResponseEntity<Response<CreatedBlogPost>> createNewBlogPost(NewBlogPostRequest request) {
         // verify that the input fields are not empty
         List<String> inputFields = validateInputFields(request);
-        if (!inputFields.isEmpty()) throw new BlogPostException(Causes.THE_FOLLOWING_FIELDS_ARE_EMPTY.label + inputFields, new Throwable(Causes.NO_EMPTY_FIELDS_ALLOWED.label));
+        if (!inputFields.isEmpty()) throw new BlogPostException(Causes.NO_EMPTY_FIELDS_ALLOWED, new Throwable(Causes.THE_FOLLOWING_FIELDS_ARE_EMPTY.label + inputFields));
 
         // create the new blog post
         Blog blog = new Blog();
@@ -71,19 +70,24 @@ public class BlogServiceImpl implements BlogService {
      * @return A {@link Response} object containing the created blog post details.
      */
     Response<CreatedBlogPost> postResponse(Blog blog) {
-        return Response.<CreatedBlogPost>builder()
-                .status(HttpStatus.CREATED.value())
-                .message("success")
-                .data(CreatedBlogPost
-                        .builder()
-                        .id(blog.getId())
-                        .createdAt(blog.getCreatedAt())
-                        .updatedAt(blog.getUpdatedAt())
-                        .title(blog.getTittle())
-                        .content(blog.getContent())
-                        .category(blog.getCategory())
-                        .tags(blog.getTags().tags())
-                        .build())
-                .build();
+        // make sure the blog item/entity is not null
+        if (blog != null) {
+
+            return Response.<CreatedBlogPost>builder()
+                    .status(HttpStatus.CREATED.value())
+                    .message("success")
+                    .data(CreatedBlogPost
+                            .builder()
+                            .id(blog.getId())
+                            .createdAt(blog.getCreatedAt())
+                            .updatedAt(blog.getUpdatedAt())
+                            .title(blog.getTittle())
+                            .content(blog.getContent())
+                            .category(blog.getCategory())
+                            .tags(blog.getTags().tags())
+                            .build())
+                    .build();
+        }
+        throw new BlogPostException(Causes.NULL_ITEM_RECEIVED);
     }
  }
