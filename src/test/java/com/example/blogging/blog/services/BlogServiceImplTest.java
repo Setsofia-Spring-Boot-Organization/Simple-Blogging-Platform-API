@@ -160,9 +160,7 @@ class BlogServiceImplTest {
         when(blogRepository.save(any(Blog.class))).thenThrow(BlogPostException.class);
 
         // perform the blog creation operation
-        BlogPostException exception = assertThrows(BlogPostException.class, () -> {
-            blogService.postResponse(null);
-        });
+        BlogPostException exception = assertThrows(BlogPostException.class, () -> blogService.postResponse(null));
 
         // assertions
         assertNotNull(exception);
