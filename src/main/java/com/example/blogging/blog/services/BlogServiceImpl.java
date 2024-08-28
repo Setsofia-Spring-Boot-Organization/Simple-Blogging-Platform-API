@@ -64,10 +64,6 @@ public class BlogServiceImpl implements BlogService {
         return emptyFields;
     }
 
-    void validateTags(List<String> tags) {
-
-    }
-
     /**
      * Constructs a response for a created blog post using the provided blog entity.
      * The response includes the status, message, and details of the created blog post.
