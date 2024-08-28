@@ -79,24 +79,6 @@ class BlogServiceImplTest {
         );
     }
 
-    ResponseEntity<Response<CreatedBlogPostData>> createdBlogPostResponse() {
-        Blog blog = blog();
-        NewBlogPostRequest blogPostRequest = blogPostRequest(blog);
-        return ResponseEntity.status(HttpStatus.CREATED).body(Response.<CreatedBlogPostData>builder()
-                .status(HttpStatus.CREATED.value())
-                .data(CreatedBlogPostData
-                        .builder()
-                        .id(blog.getId())
-                        .title(blogPostRequest.title())
-                        .category(blogPostRequest.category())
-                        .tags(blogPostRequest.tags())
-                        .createdAt(blog.getCreatedAt())
-                        .updatedAt(blog.getUpdatedAt())
-                        .build()
-                )
-                .build());
-    }
-
     @Test
     void whenAllFieldsAreValid_createNewBlogPost() {
         // initialize the blog item
@@ -169,5 +151,21 @@ class BlogServiceImplTest {
         assertNotNull(request);
         assertEquals(Causes.NO_EMPTY_FIELDS_ALLOWED.label, exception.getMessage());
         assertTrue(exception.getCause().getMessage().contains("category"));
+    }
+
+    @Test
+    void whenTheBlogEntityIsEmpty_ThrowNullItemReceivedException() {
+
+        // mock the save operation
+        when(blogRepository.save(any(Blog.class))).thenThrow(BlogPostException.class);
+
+        // perform the blog creation operation
+        BlogPostException exception = assertThrows(BlogPostException.class, () -> {
+            blogService.postResponse(null);
+        });
+
+        // assertions
+        assertNotNull(exception);
+        assertEquals(Causes.NULL_ITEM_RECEIVED.label, exception.getMessage());
     }
 }
