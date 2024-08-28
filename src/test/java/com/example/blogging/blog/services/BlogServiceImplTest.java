@@ -134,4 +134,25 @@ class BlogServiceImplTest {
         assertEquals(Causes.NO_EMPTY_FIELDS_ALLOWED.label, exception.getMessage());
         assertTrue(exception.getCause().getMessage().contains("title"));
     }
+
+    @Test
+    void whenContentFieldIsEmpty_ThrowNoEmptyFieldAllowedExceptionWithTheContentField() {
+        // initialize the blog item
+        Blog blog = blog();
+        blog.setContent("");
+        NewBlogPostRequest request = blogPostRequest(blog);
+
+        // mock the save operation
+        when(blogRepository.save(any(Blog.class))).thenThrow(BlogPostException.class);
+
+        // perform the blog creation operation
+        BlogPostException exception = assertThrows(BlogPostException.class, () -> {
+            blogService.createNewBlogPost(request);
+        });
+
+        // assertions
+        assertNotNull(request);
+        assertEquals(Causes.NO_EMPTY_FIELDS_ALLOWED.label, exception.getMessage());
+        assertTrue(exception.getCause().getMessage().contains("content"));
+    }
 }
