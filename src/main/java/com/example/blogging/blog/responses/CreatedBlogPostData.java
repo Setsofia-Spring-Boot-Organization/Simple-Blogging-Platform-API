@@ -9,7 +9,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @Getter
-public class CreatedBlogPost {
+public class CreatedBlogPostData {
     private int id;
     private String title;
     private String content;

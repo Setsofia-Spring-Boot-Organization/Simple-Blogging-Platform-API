@@ -1,7 +1,7 @@
 package com.example.blogging.blog.interfaces;
 
 import com.example.blogging.blog.requests.NewBlogPostRequest;
-import com.example.blogging.blog.responses.CreatedBlogPost;
+import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import org.springframework.http.ResponseEntity;
 
@@ -15,5 +15,5 @@ public interface BlogService {
      * @return A {@link ResponseEntity} containing the response for the created blog post,
      *         including any relevant information about the newly created post.
      */
-    ResponseEntity<Response<CreatedBlogPost>> createNewBlogPost(NewBlogPostRequest request);
+    ResponseEntity<Response<CreatedBlogPostData>> createNewBlogPost(NewBlogPostRequest request);
 }

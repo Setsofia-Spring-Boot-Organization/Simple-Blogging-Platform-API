@@ -1,7 +1,7 @@
 package com.example.blogging.blog;
 
 import com.example.blogging.blog.requests.NewBlogPostRequest;
-import com.example.blogging.blog.responses.CreatedBlogPost;
+import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import com.example.blogging.blog.services.BlogServiceImpl;
 import com.example.blogging.exception.BlogPostException;
@@ -20,7 +20,7 @@ public class Controller {
     private final BlogServiceImpl blogServiceImpl;
 
     @PostMapping
-    public ResponseEntity<Response<CreatedBlogPost>> createBlogPost(
+    public ResponseEntity<Response<CreatedBlogPostData>> createBlogPost(
             @RequestBody NewBlogPostRequest request
     ) throws BlogPostException {
         return blogServiceImpl.createNewBlogPost(request);

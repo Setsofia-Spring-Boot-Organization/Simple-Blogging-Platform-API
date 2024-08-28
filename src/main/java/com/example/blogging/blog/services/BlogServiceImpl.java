@@ -5,7 +5,7 @@ import com.example.blogging.blog.entities.Tags;
 import com.example.blogging.blog.interfaces.BlogService;
 import com.example.blogging.blog.repositories.BlogRepository;
 import com.example.blogging.blog.requests.NewBlogPostRequest;
-import com.example.blogging.blog.responses.CreatedBlogPost;
+import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import com.example.blogging.exception.BlogPostException;
 import com.example.blogging.exception.Causes;
@@ -24,7 +24,7 @@ public class BlogServiceImpl implements BlogService {
     private final BlogRepository blogRepository;
 
     @Override
-    public ResponseEntity<Response<CreatedBlogPost>> createNewBlogPost(NewBlogPostRequest request) {
+    public ResponseEntity<Response<CreatedBlogPostData>> createNewBlogPost(NewBlogPostRequest request) {
         // verify that the input fields are not empty
         List<String> inputFields = validateInputFields(request);
         if (!inputFields.isEmpty()) throw new BlogPostException(Causes.NO_EMPTY_FIELDS_ALLOWED, new Throwable(Causes.THE_FOLLOWING_FIELDS_ARE_EMPTY.label + inputFields));
@@ -40,6 +40,7 @@ public class BlogServiceImpl implements BlogService {
 
         // save the created blog
         Blog createdBlog = blogRepository.save(blog);
+        System.out.println("The created item: " + createdBlog);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(postResponse(createdBlog));
     }
@@ -62,6 +63,10 @@ public class BlogServiceImpl implements BlogService {
         return emptyFields;
     }
 
+    void validateTags(List<String> tags) {
+
+    }
+
     /**
      * Constructs a response for a created blog post using the provided blog entity.
      * The response includes the status, message, and details of the created blog post.
@@ -69,25 +74,23 @@ public class BlogServiceImpl implements BlogService {
      * @param blog The blog entity from which the response details are extracted.
      * @return A {@link Response} object containing the created blog post details.
      */
-    Response<CreatedBlogPost> postResponse(Blog blog) {
-        // make sure the blog item/entity is not null
-        if (blog != null) {
+    Response<CreatedBlogPostData> postResponse(Blog blog) {
+        // make sure the blog item/entity is not null before returning it
+        if (blog == null) throw new BlogPostException(Causes.NULL_ITEM_RECEIVED);
 
-            return Response.<CreatedBlogPost>builder()
-                    .status(HttpStatus.CREATED.value())
-                    .message("success")
-                    .data(CreatedBlogPost
-                            .builder()
-                            .id(blog.getId())
-                            .createdAt(blog.getCreatedAt())
-                            .updatedAt(blog.getUpdatedAt())
-                            .title(blog.getTittle())
-                            .content(blog.getContent())
-                            .category(blog.getCategory())
-                            .tags(blog.getTags().tags())
-                            .build())
-                    .build();
-        }
-        throw new BlogPostException(Causes.NULL_ITEM_RECEIVED);
+        return Response.<CreatedBlogPostData>builder()
+                .status(HttpStatus.CREATED.value())
+                .message("success")
+                .data(CreatedBlogPostData
+                        .builder()
+                        .id(blog.getId())
+                        .createdAt(blog.getCreatedAt())
+                        .updatedAt(blog.getUpdatedAt())
+                        .title(blog.getTittle())
+                        .content(blog.getContent())
+                        .category(blog.getCategory())
+                        .tags(blog.getTags().tags())
+                        .build())
+                .build();
     }
  }

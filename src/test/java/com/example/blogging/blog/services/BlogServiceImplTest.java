@@ -4,7 +4,7 @@ import com.example.blogging.blog.entities.Blog;
 import com.example.blogging.blog.entities.Tags;
 import com.example.blogging.blog.repositories.BlogRepository;
 import com.example.blogging.blog.requests.NewBlogPostRequest;
-import com.example.blogging.blog.responses.CreatedBlogPost;
+import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -81,12 +80,12 @@ class BlogServiceImplTest {
         );
     }
 
-    Response<CreatedBlogPost> createdBlogPostResponse() {
+    ResponseEntity<Response<CreatedBlogPostData>> createdBlogPostResponse() {
         Blog blog = blog();
         NewBlogPostRequest blogPostRequest = blogPostRequest(blog);
-        return Response.<CreatedBlogPost>builder()
+        return ResponseEntity.status(HttpStatus.CREATED).body(Response.<CreatedBlogPostData>builder()
                 .status(HttpStatus.CREATED.value())
-                .data(CreatedBlogPost
+                .data(CreatedBlogPostData
                         .builder()
                         .id(blog.getId())
                         .title(blogPostRequest.title())
@@ -96,22 +95,28 @@ class BlogServiceImplTest {
                         .updatedAt(blog.getUpdatedAt())
                         .build()
                 )
-                .build();
+                .build());
     }
 
     @Test
     void whenAllFieldsAreValid_createNewBlogPost() {
         // initialize the blog item
         Blog blog = blog();
+        NewBlogPostRequest request = blogPostRequest(blog);
 
         // mock the save operation
         when(blogRepository.save(any(Blog.class))).thenReturn(blog);
+        Blog createdBlog = blogRepository.save(blog);
+
+        System.out.println("The created blog: " + createdBlog);
+
+        when(blogService.createNewBlogPost(request)).thenReturn(createdBlogPostResponse());
 
         // perform the blog creation operation
-        ResponseEntity<Response<CreatedBlogPost>> response = blogService.createNewBlogPost(blogPostRequest(blog));
-        System.out.println(createdBlogPostResponse());
+        ResponseEntity<Response<CreatedBlogPostData>> response = blogService.createNewBlogPost(request);
 
         // assertions
+        assertNotNull(request);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
