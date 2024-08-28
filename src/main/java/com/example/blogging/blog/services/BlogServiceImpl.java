@@ -40,7 +40,6 @@ public class BlogServiceImpl implements BlogService {
 
         // save the created blog
         Blog createdBlog = blogRepository.save(blog);
-        System.out.println("The created item: " + createdBlog);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(postResponse(createdBlog));
     }
