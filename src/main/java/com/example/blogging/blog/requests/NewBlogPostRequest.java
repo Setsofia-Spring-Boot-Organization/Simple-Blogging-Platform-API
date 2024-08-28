@@ -1,5 +1,6 @@
 package com.example.blogging.blog.requests;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
  * @param category The category under which the blog post falls.
  * @param tags    A list of tags associated with the blog post.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record NewBlogPostRequest(
         String title,
         String content,
