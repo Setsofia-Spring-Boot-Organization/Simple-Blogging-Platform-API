@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class BlogServiceImplTest {
     @Mock
     BlogRepository blogRepository;
@@ -106,11 +105,6 @@ class BlogServiceImplTest {
 
         // mock the save operation
         when(blogRepository.save(any(Blog.class))).thenReturn(blog);
-        Blog createdBlog = blogRepository.save(blog);
-
-        System.out.println("The created blog: " + createdBlog);
-
-        when(blogService.createNewBlogPost(request)).thenReturn(createdBlogPostResponse());
 
         // perform the blog creation operation
         ResponseEntity<Response<CreatedBlogPostData>> response = blogService.createNewBlogPost(request);
@@ -119,5 +113,4 @@ class BlogServiceImplTest {
         assertNotNull(request);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
-
 }
