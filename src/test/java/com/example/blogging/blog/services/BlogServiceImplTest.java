@@ -98,15 +98,12 @@ class BlogServiceImplTest {
 
     @Test
     void whenTitleFieldIsEmpty_ThrowNoEmptyFieldAllowedExceptionWithTheTitleField() {
-        // initialize the blog item
         Blog blog = blog();
         blog.setTittle("");
         NewBlogPostRequest request = blogPostRequest(blog);
 
-        // mock the save operation
         when(blogRepository.save(any(Blog.class))).thenThrow(BlogPostException.class);
 
-        // perform the blog creation operation
         BlogPostException exception = assertThrows(BlogPostException.class, () -> blogService.createNewBlogPost(request));
 
         // assertions
@@ -117,15 +114,12 @@ class BlogServiceImplTest {
 
     @Test
     void whenContentFieldIsEmpty_ThrowNoEmptyFieldAllowedExceptionWithTheContentField() {
-        // initialize the blog item
         Blog blog = blog();
         blog.setContent("");
         NewBlogPostRequest request = blogPostRequest(blog);
 
-        // mock the save operation
         when(blogRepository.save(any(Blog.class))).thenThrow(BlogPostException.class);
 
-        // perform the blog creation operation
         BlogPostException exception = assertThrows(BlogPostException.class, () -> blogService.createNewBlogPost(request));
 
         // assertions
@@ -136,15 +130,12 @@ class BlogServiceImplTest {
 
     @Test
     void whenCategoryFieldIsEmpty_ThrowNoEmptyFieldAllowedExceptionWithTheCategoryField() {
-        // initialize the blog item
         Blog blog = blog();
         blog.setCategory("");
         NewBlogPostRequest request = blogPostRequest(blog);
 
-        // mock the save operation
         when(blogRepository.save(any(Blog.class))).thenThrow(BlogPostException.class);
 
-        // perform the blog creation operation
         BlogPostException exception = assertThrows(BlogPostException.class, () -> blogService.createNewBlogPost(request));
 
         // assertions
@@ -156,10 +147,8 @@ class BlogServiceImplTest {
     @Test
     void whenTheBlogEntityIsEmpty_ThrowNullItemReceivedException() {
 
-        // mock the save operation
         when(blogRepository.save(any(Blog.class))).thenThrow(BlogPostException.class);
 
-        // perform the blog creation operation
         BlogPostException exception = assertThrows(BlogPostException.class, () -> blogService.postResponse(null));
 
         // assertions
