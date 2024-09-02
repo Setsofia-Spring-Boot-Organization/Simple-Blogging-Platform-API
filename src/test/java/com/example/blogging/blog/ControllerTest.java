@@ -44,15 +44,13 @@ class ControllerTest {
     @Mock
     BlogServiceImpl blogService;
 
-    private Controller blogController;
-
     private AutoCloseable autoCloseable;
 
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        blogController = new Controller(blogService);
+        Controller blogController = new Controller(blogService);
         mockMvc = MockMvcBuilders.standaloneSetup(blogController).build();
         objectMapper = new ObjectMapper();
     }
