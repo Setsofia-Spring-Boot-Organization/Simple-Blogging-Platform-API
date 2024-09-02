@@ -9,7 +9,8 @@ public class BlogPostException extends RuntimeException{
         this.cause = cause;
     }
 
-    public BlogPostException(Causes cause) { super(cause.label);
+    public BlogPostException(Causes cause) {
+        super(cause.label);
         this.cause = cause;
     }
 }

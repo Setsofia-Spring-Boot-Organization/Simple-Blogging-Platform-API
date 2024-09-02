@@ -3,7 +3,7 @@ package com.example.blogging.blog;
 import com.example.blogging.blog.entities.Blog;
 import com.example.blogging.blog.entities.Tags;
 import com.example.blogging.blog.repositories.BlogRepository;
-import com.example.blogging.blog.requests.NewBlogPostRequest;
+import com.example.blogging.blog.requests.BlogPost;
 import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import com.example.blogging.blog.services.BlogServiceImpl;
@@ -88,8 +88,8 @@ class ControllerTest {
         return blog;
     }
 
-    NewBlogPostRequest blogPostRequest(Blog blog) {
-        return new NewBlogPostRequest(
+    BlogPost blogPostRequest(Blog blog) {
+        return new BlogPost(
                 blog.getTittle(),
                 blog.getContent(),
                 blog.getCategory(),
@@ -120,9 +120,9 @@ class ControllerTest {
     @Test
     void whenBlogPostIsCreated_ReturnCreatedHttpResponseWithTheCreatedData() throws Exception {
         Blog blog = blog();
-        NewBlogPostRequest request = blogPostRequest(blog);
+        BlogPost request = blogPostRequest(blog);
 
-        when(blogService.createNewBlogPost(any(NewBlogPostRequest.class))).thenReturn(ResponseEntity.status(HttpStatus.CREATED).body(postResponse(blog)));
+        when(blogService.createNewBlogPost(any(BlogPost.class))).thenReturn(ResponseEntity.status(HttpStatus.CREATED).body(postResponse(blog)));
 
         // sending the post request to the controller
         MvcResult postResult = mockMvc.perform(
@@ -143,7 +143,7 @@ class ControllerTest {
     @Test
     void whenAnyRequestFiledIsEmpty_ReturnBadRequestHttpResponse() throws Exception {
         Blog blog = blog();
-        NewBlogPostRequest request = blogPostRequest(blog);
+        BlogPost request = blogPostRequest(blog);
 
         // sending the post request to the controller
         MvcResult postResult = mockMvc.perform(

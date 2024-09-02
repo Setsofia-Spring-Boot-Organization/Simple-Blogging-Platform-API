@@ -14,7 +14,7 @@ import java.util.List;
  * @param tags    A list of tags associated with the blog post.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record NewBlogPostRequest(
+public record BlogPost(
         String title,
         String content,
         String category,
