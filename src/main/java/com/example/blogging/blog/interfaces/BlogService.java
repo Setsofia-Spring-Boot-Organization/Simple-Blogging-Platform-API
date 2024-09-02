@@ -1,10 +1,13 @@
 package com.example.blogging.blog.interfaces;
 
+import com.example.blogging.blog.entities.Blog;
 import com.example.blogging.blog.requests.BlogPost;
 import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface BlogService {
 
@@ -41,4 +44,12 @@ public interface BlogService {
      * @return a ResponseEntity containing a Response object with the data of the retrieved blog post
      */
     ResponseEntity<Response<CreatedBlogPostData>> getSingleBlogPostById(int id);
+
+    /**
+     * This method retrieves a list of blog posts that match the specified search term.
+     *
+     * @param term the search term used to filter the blog posts
+     * @return a ResponseEntity containing a Response object with a list of data for the filtered blog posts
+     */
+    ResponseEntity<Response<List<Blog>>> getBlogPosts(String term);
 }

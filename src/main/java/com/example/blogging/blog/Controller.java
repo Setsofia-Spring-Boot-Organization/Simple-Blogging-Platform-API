@@ -1,5 +1,6 @@
 package com.example.blogging.blog;
 
+import com.example.blogging.blog.entities.Blog;
 import com.example.blogging.blog.requests.BlogPost;
 import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,5 +47,12 @@ public class Controller {
             @PathVariable int id
     ) throws BlogPostException {
         return blogServiceImpl.getSingleBlogPostById(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<Response<List<Blog>>> getSingleBlogPosts(
+            @RequestParam(required = false) String term
+    ) throws BlogPostException {
+        return blogServiceImpl.getBlogPosts(term);
     }
 }

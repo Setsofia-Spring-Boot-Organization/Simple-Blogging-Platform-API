@@ -75,6 +75,25 @@ public class BlogServiceImpl implements BlogService {
         return ResponseEntity.status(HttpStatus.OK).body(postResponse(HttpStatus.OK, blog));
     }
 
+    @Override
+    public ResponseEntity<Response<List<Blog>>> getBlogPosts(String term) {
+        List<Blog> blogs;
+        if (term != null) {
+            blogs = blogRepository.findBlogs(term);
+        } else {
+            blogs = blogRepository.findAll();
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                Response.<List<Blog>>builder()
+                        .status(HttpStatus.OK.value())
+                        .message("success")
+                        .data(blogs)
+                .build()
+        );
+    }
+
     // helper methods:
     /**
      * Validates the input fields of the provided blog post request.
