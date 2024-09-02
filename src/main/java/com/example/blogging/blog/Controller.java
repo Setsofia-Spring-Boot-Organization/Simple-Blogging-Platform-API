@@ -1,6 +1,7 @@
 package com.example.blogging.blog;
 
 import com.example.blogging.blog.requests.NewBlogPostRequest;
+import com.example.blogging.blog.requests.UpdateBlogPost;
 import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import com.example.blogging.blog.services.BlogServiceImpl;
@@ -8,10 +9,7 @@ import com.example.blogging.exception.BlogPostException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,5 +23,13 @@ public class Controller {
             @Validated @RequestBody NewBlogPostRequest request
     ) throws BlogPostException {
         return blogServiceImpl.createNewBlogPost(request);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Response<CreatedBlogPostData>> updateBlogPost(
+            @PathVariable int id,
+            @Validated @RequestBody UpdateBlogPost request
+    ) throws BlogPostException {
+        return blogServiceImpl.updateBlogPost(id, request);
     }
 }

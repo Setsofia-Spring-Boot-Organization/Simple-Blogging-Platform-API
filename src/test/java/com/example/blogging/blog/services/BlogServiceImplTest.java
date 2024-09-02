@@ -4,6 +4,7 @@ import com.example.blogging.blog.entities.Blog;
 import com.example.blogging.blog.entities.Tags;
 import com.example.blogging.blog.repositories.BlogRepository;
 import com.example.blogging.blog.requests.NewBlogPostRequest;
+import com.example.blogging.blog.requests.UpdateBlogPost;
 import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import com.example.blogging.exception.BlogPostException;
@@ -19,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -72,6 +75,15 @@ class BlogServiceImplTest {
 
     NewBlogPostRequest blogPostRequest(Blog blog) {
         return new NewBlogPostRequest(
+                blog.getTittle(),
+                blog.getContent(),
+                blog.getCategory(),
+                blog.getTags().tags()
+        );
+    }
+
+    UpdateBlogPost updateBlogPost(Blog blog) {
+        return new UpdateBlogPost(
                 blog.getTittle(),
                 blog.getContent(),
                 blog.getCategory(),
@@ -154,5 +166,22 @@ class BlogServiceImplTest {
         // assertions
         assertNotNull(exception);
         assertEquals(Causes.NULL_ITEM_RECEIVED.label, exception.getMessage());
+    }
+
+    @Test
+    void whenAllFieldsAreValidAndThePostIdExists_updateBlogPost() {
+        // initialize the blog item
+        Blog blog = blog();
+        UpdateBlogPost request = updateBlogPost(blog);
+
+        // mock the save operation
+        when(blogRepository.findById(Blog.class.getModifiers())).thenReturn(Optional.of(blog));
+
+        // perform the blog creation operation
+        ResponseEntity<Response<CreatedBlogPostData>> response = blogService.updateBlogPost(blog().getId(), request);
+
+        // assertions
+        assertNotNull(response.getBody());
+//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 }

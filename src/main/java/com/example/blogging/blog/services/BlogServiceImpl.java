@@ -5,6 +5,7 @@ import com.example.blogging.blog.entities.Tags;
 import com.example.blogging.blog.interfaces.BlogService;
 import com.example.blogging.blog.repositories.BlogRepository;
 import com.example.blogging.blog.requests.NewBlogPostRequest;
+import com.example.blogging.blog.requests.UpdateBlogPost;
 import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import com.example.blogging.exception.BlogPostException;
@@ -42,6 +43,11 @@ public class BlogServiceImpl implements BlogService {
         Blog createdBlog = blogRepository.save(blog);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(postResponse(createdBlog));
+    }
+
+    @Override
+    public ResponseEntity<Response<CreatedBlogPostData>> updateBlogPost(int id,  UpdateBlogPost request) {
+        return null;
     }
 
     // helper methods:

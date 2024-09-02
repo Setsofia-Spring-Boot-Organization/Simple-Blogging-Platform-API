@@ -1,6 +1,7 @@
 package com.example.blogging.blog.interfaces;
 
 import com.example.blogging.blog.requests.NewBlogPostRequest;
+import com.example.blogging.blog.requests.UpdateBlogPost;
 import com.example.blogging.blog.responses.CreatedBlogPostData;
 import com.example.blogging.blog.responses.Response;
 import org.springframework.http.ResponseEntity;
@@ -16,4 +17,12 @@ public interface BlogService {
      *         including any relevant information about the newly created post.
      */
     ResponseEntity<Response<CreatedBlogPostData>> createNewBlogPost(NewBlogPostRequest request);
+
+    /**
+     * This method updates an existing blog post based on the provided request data.
+     *
+     * @param request the data for the blog post that needs to be updated
+     * @return a ResponseEntity containing a Response object with the data of the updated blog post
+     */
+    ResponseEntity<Response<CreatedBlogPostData>> updateBlogPost(int id, UpdateBlogPost request);
 }
