@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Integer> {
 
-    @Query("SELECT p FROM Blog p WHERE p.category LIKE LOWER(CONCAT('%', :term, '%')) " +
-            "OR p.content LIKE LOWER(CONCAT('%', :term, '%')) " +
-            "OR p.tittle LIKE LOWER(CONCAT('%', :term, '%'))")
+    @Query("SELECT p FROM Blog p WHERE LOWER(p.category) LIKE LOWER(CONCAT('%', :term, '%')) " +
+            "OR LOWER(p.content) LIKE LOWER(CONCAT('%', :term, '%')) " +
+            "OR LOWER(p.tittle) LIKE LOWER(CONCAT('%', :term, '%'))")
     List<Blog> findBlogs(@Param("term") String term);
 }

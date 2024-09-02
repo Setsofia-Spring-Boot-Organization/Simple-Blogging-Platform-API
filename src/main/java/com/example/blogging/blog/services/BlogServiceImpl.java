@@ -78,10 +78,10 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public ResponseEntity<Response<List<Blog>>> getBlogPosts(String term) {
         List<Blog> blogs;
-        if (term != null) {
-            blogs = blogRepository.findBlogs(term);
-        } else {
+        if (term.isEmpty()) {
             blogs = blogRepository.findAll();
+        } else {
+            blogs = blogRepository.findBlogs(term);
         }
 
 
