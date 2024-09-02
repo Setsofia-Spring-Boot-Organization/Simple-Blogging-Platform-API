@@ -220,5 +220,23 @@ class BlogServiceImplTest {
         assertEquals("The following fields are empty: [category]", exception.getCause().getMessage());
     }
 
+    @Test
+    void whenTheTitleFieldInTheUpdateRequestIsEmpty_ThrowNoEmptyFieldAllowedExceptionWithTheTitleField() {
+        // initialize the blog item
+        Blog blog = blog();
+        blog.setTittle("");
+        BlogPost request = blogPostRequest(blog);
 
+        // mock the save operation
+        when(blogRepository.save(any(Blog.class))).thenReturn(blog);
+        when(blogRepository.findById(blog().getId())).thenReturn(Optional.of(blog));
+
+        // perform the blog creation operation
+        BlogPostException exception = assertThrows(BlogPostException.class, () -> blogService.updateBlogPost(3, request));
+
+        // assertions
+        assertNotNull(exception);
+        assertEquals(Causes.NO_EMPTY_FIELDS_ALLOWED.label, exception.getMessage());
+        assertEquals("The following fields are empty: [title]", exception.getCause().getMessage());
+    }
 }
