@@ -18,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -287,5 +288,24 @@ class BlogServiceImplTest {
         assertNotNull(Objects.requireNonNull(response.getBody()).getData());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(blog.getId(), response.getBody().getData().getId());
+    }
+
+    @Test
+    void getBlogPosts() {
+        List<Blog> blogs = new ArrayList<>();
+
+        for (int i = 1; i < 6; i++) {
+            Blog blog = blog();
+            blog.setId(i);
+            blogs.add(blog);
+        }
+
+        when(blogRepository.findBlogs(blog().getTittle())).thenReturn(blogs);
+
+        ResponseEntity<Response<List<Blog>>> response = blogService.getBlogPosts(blog().getTittle());
+
+        // assertions:
+        assertNotNull(response);
+        assertEquals(5, Objects.requireNonNull(response.getBody()).getData().size());
     }
 }
