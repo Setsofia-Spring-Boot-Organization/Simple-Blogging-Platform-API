@@ -180,4 +180,23 @@ class BlogServiceImplTest {
         assertNotNull(response.getBody().getData().getContent());
         assertNotNull(response.getBody().getData().getTitle());
     }
+
+    @Test
+    void whenTheBlogIdDoesNotExist_Throw_BLOG_ID_DOES_NOT_EXIST_Exception() {
+        // initialize the blog item
+        Blog blog = blog();
+        BlogPost request = blogPostRequest(blog);
+
+        // mock the save operation
+        when(blogRepository.save(any(Blog.class))).thenReturn(blog);
+        when(blogRepository.findById(blog().getId())).thenReturn(Optional.of(blog));
+
+        // perform the blog creation operation
+        BlogPostException exception = assertThrows(BlogPostException.class, () -> blogService.updateBlogPost(3, request));
+
+        // assertions
+        assertNotNull(exception);
+        assertEquals(Causes.BLOG_ID_DOES_NOT_EXIST.label, exception.getMessage());
+        assertEquals("The submitted id is not in the system", exception.getCause().getMessage());
+    }
 }
