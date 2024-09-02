@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 class ControllerTest {
 
@@ -130,12 +131,34 @@ class ControllerTest {
                 MockMvcRequestBuilders
                         .post("/blog/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
                         .content(objectMapper.writeValueAsBytes(request)))
+                .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
 
         // assertions
         assertNotNull(postResult);
         assertEquals(HttpStatus.CREATED.value(), postResult.getResponse().getStatus());
+    }
+
+    @Test
+    void whenAnyRequestFiledIsEmpty_ReturnBadRequestHttpResponse() throws Exception {
+        Blog blog = blog();
+        NewBlogPostRequest request = blogPostRequest(blog);
+
+        // sending the post request to the controller
+        MvcResult postResult = mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/blog/api/v1/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .content(objectMapper.writeValueAsBytes(request)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+
+        String body = postResult.getResponse().getContentAsString();
+        System.out.println(body);
     }
 }
