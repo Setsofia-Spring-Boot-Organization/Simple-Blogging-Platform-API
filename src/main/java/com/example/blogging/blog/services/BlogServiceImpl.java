@@ -58,6 +58,16 @@ public class BlogServiceImpl implements BlogService {
         return ResponseEntity.status(HttpStatus.OK).body(postResponse(HttpStatus.OK, updatedBlog));
     }
 
+    @Override
+    public ResponseEntity<HttpStatus> deleteBlogPost(int id) {
+        Blog blog = getBlogById(id);
+
+        // delete the blog
+        blogRepository.delete(blog);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT.value()).body(HttpStatus.NO_CONTENT);
+    }
+
     // helper methods:
     /**
      * Validates the input fields of the provided blog post request.

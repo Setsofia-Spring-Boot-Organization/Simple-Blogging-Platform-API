@@ -6,6 +6,7 @@ import com.example.blogging.blog.responses.Response;
 import com.example.blogging.blog.services.BlogServiceImpl;
 import com.example.blogging.exception.BlogPostException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,12 @@ public class Controller {
             @Validated @RequestBody BlogPost request
     ) throws BlogPostException {
         return blogServiceImpl.updateBlogPost(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteBlogPost(
+            @PathVariable int id
+    ) throws BlogPostException {
+        return blogServiceImpl.deleteBlogPost(id);
     }
 }
