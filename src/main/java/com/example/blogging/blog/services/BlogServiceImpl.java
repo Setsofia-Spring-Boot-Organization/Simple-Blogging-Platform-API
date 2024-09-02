@@ -66,7 +66,7 @@ public class BlogServiceImpl implements BlogService {
      * @param postRequest The request object containing the details of the blog post to be validated.
      * @return A list of field names that are empty. If all fields are filled, the list will be empty.
      */
-    <T extends BlogPost> List<String>  validateInputFields(T postRequest) {
+    private <T extends BlogPost> List<String>  validateInputFields(T postRequest) {
         List<String> emptyFields = new ArrayList<>();
 
         if (postRequest.title().isEmpty()) emptyFields.add("title");
@@ -85,7 +85,7 @@ public class BlogServiceImpl implements BlogService {
      * @param request the new data for the blog post
      * @return the updated Blog entity after it has been saved to the repository
      */
-    Blog updateBlog(int id, BlogPost request) {
+    private Blog updateBlog(int id, BlogPost request) {
         // confirm the blog exists
         Blog blog = getBlogById(id);
 
@@ -134,7 +134,7 @@ public class BlogServiceImpl implements BlogService {
      * @return the Blog entity with the specified ID
      * @throws BlogPostException if a blog with the given ID does not exist
      */
-    Blog getBlogById(int id) throws BlogPostException {
+    private Blog getBlogById(int id) throws BlogPostException {
         Optional<Blog> optionalPost = blogRepository.findById(id);
         if (optionalPost.isEmpty()) throw new BlogPostException(Causes.BLOG_ID_DOES_NOT_EXIST, new Throwable("The submitted id is not in the system"));
 
