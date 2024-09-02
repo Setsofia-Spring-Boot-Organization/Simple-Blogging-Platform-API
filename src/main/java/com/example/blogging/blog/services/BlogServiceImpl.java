@@ -68,6 +68,13 @@ public class BlogServiceImpl implements BlogService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT.value()).body(HttpStatus.NO_CONTENT);
     }
 
+    @Override
+    public ResponseEntity<Response<CreatedBlogPostData>> getSingleBlogPostById(int id) {
+        Blog blog = getBlogById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(postResponse(HttpStatus.OK, blog));
+    }
+
     // helper methods:
     /**
      * Validates the input fields of the provided blog post request.

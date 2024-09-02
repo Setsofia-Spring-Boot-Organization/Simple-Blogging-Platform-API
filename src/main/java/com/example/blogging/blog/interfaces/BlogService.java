@@ -33,4 +33,12 @@ public interface BlogService {
      * @return a ResponseEntity with the HTTP status indicating the result of the deletion operation
      */
     ResponseEntity<HttpStatus> deleteBlogPost(int id);
+
+    /**
+     * This method retrieves a single blog post by its ID.
+     *
+     * @param id the ID of the blog post to be retrieved
+     * @return a ResponseEntity containing a Response object with the data of the retrieved blog post
+     */
+    ResponseEntity<Response<CreatedBlogPostData>> getSingleBlogPostById(int id);
 }

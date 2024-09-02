@@ -39,4 +39,11 @@ public class Controller {
     ) throws BlogPostException {
         return blogServiceImpl.deleteBlogPost(id);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<CreatedBlogPostData>> getSingleBlogPostById(
+            @PathVariable int id
+    ) throws BlogPostException {
+        return blogServiceImpl.getSingleBlogPostById(id);
+    }
 }
