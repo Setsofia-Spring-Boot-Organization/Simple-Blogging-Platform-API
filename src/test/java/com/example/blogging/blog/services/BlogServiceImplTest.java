@@ -259,4 +259,17 @@ class BlogServiceImplTest {
         assertEquals(Causes.NO_EMPTY_FIELDS_ALLOWED.label, exception.getMessage());
         assertEquals("The following fields are empty: [content]", exception.getCause().getMessage());
     }
+
+    @Test
+    void whenTheBlogIdExists_deleteBlogPost_And_Return_204_StatusCode() {
+        Blog blog = blog();
+
+        when(blogRepository.findById(blog.getId())).thenReturn(Optional.of(blog));
+
+        ResponseEntity<HttpStatus> response = blogService.deleteBlogPost(blog.getId());
+
+        // assertions:
+        assertNotNull(response);
+        assertEquals(HttpStatus.NO_CONTENT, response.getBody());
+    }
 }
