@@ -348,7 +348,7 @@ class BlogServiceImplTest {
     }
 
     @Test
-    void whenTheSearchTermIsEmpty_getAllBlogPosts() {
+    void whenTheSearchTermIsEmpty_getAllTheBlogPosts() {
         List<Blog> blogs = new ArrayList<>();
 
         for (int i = 1; i < 6; i++) {
