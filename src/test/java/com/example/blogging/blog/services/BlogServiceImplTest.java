@@ -329,7 +329,7 @@ class BlogServiceImplTest {
     }
 
     @Test
-    void whenTheSearchTermIsInTheContentABlog_getTheBlogPosts() {
+    void whenTheSearchTermIsInTheContentABlog_getThe_BlogPosts() {
         List<Blog> blogs = new ArrayList<>();
 
         for (int i = 1; i < 6; i++) {
