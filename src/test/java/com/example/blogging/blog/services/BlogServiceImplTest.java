@@ -291,7 +291,7 @@ class BlogServiceImplTest {
     }
 
     @Test
-    void getBlogPosts() {
+    void whenTheSearchTermMatchesTheTitleOfABlog_getTheBlogPosts() {
         List<Blog> blogs = new ArrayList<>();
 
         for (int i = 1; i < 6; i++) {
@@ -303,6 +303,63 @@ class BlogServiceImplTest {
         when(blogRepository.findBlogs(blog().getTittle())).thenReturn(blogs);
 
         ResponseEntity<Response<List<Blog>>> response = blogService.getBlogPosts(blog().getTittle());
+
+        // assertions:
+        assertNotNull(response);
+        assertEquals(5, Objects.requireNonNull(response.getBody()).getData().size());
+    }
+
+    @Test
+    void whenTheSearchTermMatchesTheCategoryOfInBlog_getTheBlogPosts() {
+        List<Blog> blogs = new ArrayList<>();
+
+        for (int i = 1; i < 6; i++) {
+            Blog blog = blog();
+            blog.setId(i);
+            blogs.add(blog);
+        }
+
+        when(blogRepository.findBlogs(blog().getCategory())).thenReturn(blogs);
+
+        ResponseEntity<Response<List<Blog>>> response = blogService.getBlogPosts(blog().getCategory());
+
+        // assertions:
+        assertNotNull(response);
+        assertEquals(5, Objects.requireNonNull(response.getBody()).getData().size());
+    }
+
+    @Test
+    void whenTheSearchTermIsInTheContentABlog_getTheBlogPosts() {
+        List<Blog> blogs = new ArrayList<>();
+
+        for (int i = 1; i < 6; i++) {
+            Blog blog = blog();
+            blog.setId(i);
+            blogs.add(blog);
+        }
+
+        when(blogRepository.findBlogs(blog().getContent())).thenReturn(blogs);
+
+        ResponseEntity<Response<List<Blog>>> response = blogService.getBlogPosts(blog().getContent());
+
+        // assertions:
+        assertNotNull(response);
+        assertEquals(5, Objects.requireNonNull(response.getBody()).getData().size());
+    }
+
+    @Test
+    void whenTheSearchTermIsEmpty_getAllBlogPosts() {
+        List<Blog> blogs = new ArrayList<>();
+
+        for (int i = 1; i < 6; i++) {
+            Blog blog = blog();
+            blog.setId(i);
+            blogs.add(blog);
+        }
+
+        when(blogRepository.findAll()).thenReturn(blogs);
+
+        ResponseEntity<Response<List<Blog>>> response = blogService.getBlogPosts("");
 
         // assertions:
         assertNotNull(response);
